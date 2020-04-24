@@ -3,7 +3,6 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Models\Album;
-use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -18,11 +17,14 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(App\Models\Album::class, function (Faker $faker) {
+$factory->define(App\Models\Photo::class, function (Faker $faker) {
+    $cats = ['abstract', 'animals', 'business', 'food', 'city'];
     return [
-        'album_name' => $faker->name,
+        'album_id' => Album::inRandomOrder()->first()->id,
+        'name' => $faker->text(64),
         'description' => $faker->text(128),
-        'user_id' => User::inRandomOrder()->first()
+        'img_path' => 'https://picsum.photos/640/680'
     ];
 });
+
 
