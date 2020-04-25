@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Album;
+use App\Models\Photo;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +24,19 @@ Route::get('welcome/{name?}/{lastname?}/{age?}', 'HomeController@index')->where(
     'age'=>'[0-9]{1,3}'
 ]);
 
-Route::get('/albums', function () {
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-    //Album::truncate();
-    //Album::all();
+Route::get('/albums', 'AlbumsController@index')->name('albums');
+Route::get('/albums/{id}/edit', 'AlbumsController@edit');
+Route::get('/albums/{id}', 'AlbumsController@show');
+Route::delete('/albums/{id}', 'AlbumsController@delete');
+Route::patch('/albums/{id}', 'AlbumsController@store');
+
+Route::get('/photos', function () {
+    return Photo::all();
 });
 
+Route::get('/users', function () {
+    return User::all();
+});
 /*
 Route::get('/{name?}/{lastname?}/{age?}', function($name='', $lastname='', $age=0) {
         return '<h1>Hello world '.$name.' '.$lastname.' you are '.$age.' old</h1>';
