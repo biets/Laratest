@@ -3,7 +3,7 @@
 
     <h1>Create</h1>
 
-    <form action="/albums/" method="POST">
+    <form action="{{route('albums.save')}}" method="POST">
         {{csrf_field()}}
 
         <input type="hidden" name="user_id" value="1" />

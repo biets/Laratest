@@ -19,17 +19,24 @@ class AlbumsController extends Controller
             $where['album_name'] = $request->get('album_name');
             $sql .= " AND album_name=:album_name";
         }
-
+        $sql.= ' ORDER BY id DESC';
         $albums = DB::select($sql, $where);
         return view('albums.albums', ['albums' => $albums]);
     }
 
     public function create() {
-        echo 'sono qui';
-        /*$sql ="SELECT album_name, description, id FROM albums WHERE id=:id";
-        $album = DB::select($sql, ['id'=> $id]);
+        return view('albums.create');
+    }
 
-        return view('albums.editalbum')->with('album', $album[0]);*/
+    public function save() {
+        $data = request()->only(['name', 'description']);
+        $data['user_id'] = 1;
+        $sql = 'INSERT INTO albums (album_name, description, user_id) ';
+        $sql.= ' VALUES (:name, :description, :user_id)';
+        $res = DB::insert($sql, $data);
+        $message = $res ? 'Album '.$data['name'].' inserito ':'Album '.$data['name'].' non inserito ';
+        session()->flash('message', $message);
+        return redirect()->route('albums');
     }
 
     public function show($id) {
