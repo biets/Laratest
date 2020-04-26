@@ -34,14 +34,22 @@ Route::patch('/albums/{id}', 'AlbumsController@store');
 Route::get('/albums/{id}/edit', 'AlbumsController@edit');
 Route::delete('/albums/{id}', 'AlbumsController@delete');
 
+// USERS
+Route::get('/users', function () {
+    return User::all();
+});
+
+Route::get('usersnoalbum', function() {
+    $usersnoalbum = DB::table('users as u')->leftjoin('albums as a', 'u.id','=', 'a.user_id')
+        ->select('u.id','name','email')->whereNull('album_name')->get();
+    return $usersnoalbum;
+});
+
 
 Route::get('/photos', function () {
     return Photo::all();
 });
 
-Route::get('/users', function () {
-    return User::all();
-});
 /*
 Route::get('/{name?}/{lastname?}/{age?}', function($name='', $lastname='', $age=0) {
         return '<h1>Hello world '.$name.' '.$lastname.' you are '.$age.' old</h1>';
