@@ -24,6 +24,14 @@ class AlbumsController extends Controller
         return view('albums.albums', ['albums' => $albums]);
     }
 
+    public function create() {
+        echo 'sono qui';
+        /*$sql ="SELECT album_name, description, id FROM albums WHERE id=:id";
+        $album = DB::select($sql, ['id'=> $id]);
+
+        return view('albums.editalbum')->with('album', $album[0]);*/
+    }
+
     public function show($id) {
         $sql = "SELECT * FROM albums WHERE id=:id ";
 

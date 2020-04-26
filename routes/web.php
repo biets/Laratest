@@ -25,6 +25,7 @@ Route::get('welcome/{name?}/{lastname?}/{age?}', 'HomeController@index')->where(
 ]);
 
 Route::get('/albums', 'AlbumsController@index')->name('albums');
+Route::get('/albums/create', 'AlbumsController@create')->name('albums.create');
 Route::get('/albums/{id}/edit', 'AlbumsController@edit');
 Route::get('/albums/{id}', 'AlbumsController@show');
 Route::delete('/albums/{id}', 'AlbumsController@delete');
