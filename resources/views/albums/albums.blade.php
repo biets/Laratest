@@ -12,8 +12,10 @@
     @foreach($albums as $album)
             <li class="list-group-item justify-content-between">
                 {{$album->album_name}}
+                <div>
                 <a href="/albums/{{$album->id}}/edit" class="btn btn-primary">UPDATE</a>
                 <a href="/albums/{{$album->id}}" class="btn btn-danger">DELETE</a>
+                </div>
             </li>
         @endforeach
     </ul>
@@ -29,7 +31,7 @@
                     ele.preventDefault();
 
                     var urlAlbum = $(this).attr('href');
-                    var li = ele.target.parentNode;
+                    var li = ele.target.parentNode.parentNode;
 
                     $.ajax(urlAlbum, {
                         method: 'DELETE',

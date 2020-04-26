@@ -9,6 +9,65 @@ use Illuminate\Support\Facades\DB;
 class AlbumsController extends Controller
 {
     public function index(Request $request) {
+        $queryBuilder = DB::table('albums')->orderBy('id', 'DESC');
+        if($request->has('id')) {
+            $queryBuilder->where('id','=', $request->input('id'));
+        }
+        if($request->has('album_name')) {
+            $queryBuilder->where('album_name','like', '%'.$request->input('album_name').'%');
+        }
+
+        $albums = $queryBuilder->get();
+        return view('albums.albums', ['albums' => $albums]);
+    }
+
+    public function create() {
+        return view('albums.create');
+    }
+
+    public function save() {
+        $res = DB::table('albums')->insert(
+            ['album_name' => request()->input('name'),
+                'description' => request()->input('description'),
+                'user_id' => request()->input('user_id')
+            ]);
+        $message = $res ? 'Album '.request()->input('name').' inserito ':'Album '.request()->input('name').' non inserito ';
+        session()->flash('message', $message);
+        return redirect()->route('albums');
+    }
+
+    public function show($id) {
+        $sql = "SELECT * FROM albums WHERE id=:id ";
+
+        return DB::select($sql, ['id'=> $id]);
+
+    }
+
+    public function edit($id) {
+        DB::table('albums')->where('id');
+        $sql ="SELECT album_name, description, id FROM albums WHERE id=:id";
+        $album = DB::select($sql, ['id'=> $id]);
+
+        return view('albums.editalbum')->with('album', $album[0]);
+    }
+
+    public function store($id, Request $req){
+        $res = DB::table('albums')->where('id', $id)->update(
+            ['album_name' => request()->input('name'),
+                'description' => request()->input('description')]
+        );
+        $message = $res ? 'Album id: '.$id.' aggiornato ':'Album id: '.$id.' non aggiornato ';
+        session()->flash('message', $message);
+        return redirect()->route('albums');
+    }
+
+    public function delete($id) {
+        return DB::table('albums')->where('id', $id)->delete();
+    }
+
+
+    /* Chiamate al DB con query grezze
+    public function index(Request $request) {
         $sql = 'Select * from albums WHERE 1=1 ';
         $where = [];
         if($request->has('id')) {
@@ -70,5 +129,5 @@ class AlbumsController extends Controller
         return DB::delete($sql, ['id'=> $id]);
 
         //return redirect()->back();
-    }
+    }*/
 }
