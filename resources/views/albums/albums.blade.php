@@ -10,11 +10,15 @@
         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
     <ul class="list-group">
     @foreach($albums as $album)
-            <li class="list-group-item justify-content-between">
-                {{$album->album_name}}
-                <div>
-                <a href="/albums/{{$album->id}}/edit" class="btn btn-primary">UPDATE</a>
-                <a href="/albums/{{$album->id}}" class="btn btn-danger">DELETE</a>
+            <li class="list-group-item">
+                <div class="justify-content-end">
+                    {{$album->album_name}}
+                    @if($album->album_thumb)
+                        <img width="300" src="{{$album->album_thumb}}" title="{{$album->album_name}}" alt="{{$album->album_name}}" />
+                    @endif
+
+                    <a href="/albums/{{$album->id}}/edit" class="btn btn-primary">UPDATE</a>
+                    <a href="/albums/{{$album->id}}" class="btn btn-danger">DELETE</a>
                 </div>
             </li>
         @endforeach

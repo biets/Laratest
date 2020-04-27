@@ -22,7 +22,8 @@ $factory->define(App\Models\Album::class, function (Faker $faker) {
     return [
         'album_name' => $faker->name,
         'description' => $faker->text(128),
-        'user_id' => User::inRandomOrder()->first()
+        'user_id' => User::inRandomOrder()->first(),
+        'album_thumb' => 'https://picsum.photos/120/120'
     ];
 });
 
