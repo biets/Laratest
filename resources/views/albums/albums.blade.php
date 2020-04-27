@@ -12,11 +12,13 @@
     @foreach($albums as $album)
             <li class="list-group-item">
                 <div class="justify-content-end">
-                    {{$album->album_name}}
+                    ({{$album->id}}) {{$album->album_name}}
                     @if($album->album_thumb)
-                        <img width="300" src="{{asset($album->path)}}" title="{{$album->album_name}}" alt="{{$album->album_name}}" />
+                        <img width="150" height="150" src="{{asset($album->path)}}" title="{{$album->album_name}}" alt="{{$album->album_name}}" />
                     @endif
-
+                    @if($album->photos_count)
+                    <a href="/albums/{{$album->id}}/images" class="btn btn-primary">({{$album->photos_count}})VIEW IMAGES</a>
+                    @endif
                     <a href="/albums/{{$album->id}}/edit" class="btn btn-primary">UPDATE</a>
                     <a href="/albums/{{$album->id}}" class="btn btn-danger">DELETE</a>
                 </div>

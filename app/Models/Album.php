@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Photo;
 
 class Album extends Model {
     //se il nome della tabella è diversa e non è al plurale nel db dichiararla con: protected $table = 'album';
@@ -15,5 +16,9 @@ class Album extends Model {
             $url = 'storage/'.$this->album_thumb;
         }
         return $url;
+    }
+
+    public function photos() {
+        return $this->hasMany(Photo::class,'album_id', 'id');
     }
 }

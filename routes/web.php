@@ -32,7 +32,8 @@ Route::get('/albums/create', 'AlbumsController@create')->name('albums.create');
 Route::post('/albums', 'AlbumsController@save')->name('albums.save');
 Route::patch('/albums/{id}', 'AlbumsController@store');
 Route::get('/albums/{id}/edit', 'AlbumsController@edit');
-Route::delete('/albums/{id}', 'AlbumsController@delete');
+Route::get('/albums/{album}/images', 'AlbumsController@getImages')->name('albums.getImages')->where('id', '[0-9]+');
+Route::delete('/albums/{album}', 'AlbumsController@delete')->where('id', '[0-9]+');
 
 // USERS
 Route::get('/users', function () {

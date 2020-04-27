@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AlbumsController extends Controller
 {
     public function index(Request $request) {
-        $queryBuilder = Album::orderBy('id', 'DESC');
+        $queryBuilder = Album::orderBy('id', 'DESC')->withCount('photos');
         if($request->has('id')) {
             $queryBuilder->where('id','=', $request->input('id'));
         }
@@ -88,8 +90,19 @@ class AlbumsController extends Controller
         return redirect()->route('albums');
     }
 
-    public function delete($id) {
-        return Album::find($id)->delete();
+    public function delete(Album $album) {
+        $thumbnail = $album->album_thumb;
+        $disk = config('filesystem.default');
+        $res = $album->delete();
+
+        if($res) {
+            if($thumbnail && Storage::disk($disk)->has($thumbnail)) {
+                Storage::disk($disk)->delete($thumbnail);
+            }
+
+        }
+        return ' '.$res;
+        //return Album::find($id)->delete();
         //return Album::where('id', $id)->delete();
     }
 
@@ -116,6 +129,13 @@ class AlbumsController extends Controller
         $album->album_thumb = env('ALBUM_THUMB_DIR') . '/' . $fileName;
 
         return true;
+    }
+
+    public function getImages(Album $album) {
+
+        $images = Photo::where('album_id', $album->id)->get();
+
+        return view('albums.images.albumImages', compact('album','images'));
     }
 
     /* Chiamate al DB con query grezze
