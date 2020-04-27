@@ -3,7 +3,7 @@
 
     <h1>Create</h1>
 
-    <form action="{{route('albums.save')}}" method="POST">
+    <form action="{{route('albums.save')}}" method="POST" enctype="multipart/form-data">
         {{csrf_field()}}
 
         <input type="hidden" name="user_id" value="1" />
@@ -15,6 +15,8 @@
             <label for="">Description</label>
             <textarea name="description" id="description"></textarea>
         </div>
+
+        @include('albums.partials.fileupload')
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

@@ -22,15 +22,27 @@ class AlbumsController extends Controller
     }
 
     public function create() {
-        return view('albums.create');
+        $album = new Album();
+        return view('albums.create', ['album' => $album]);
     }
 
-    public function save() {
+    public function save()
+    {
         $album = new Album();
         $album->album_name = request()->input('name');
         $album->description = request()->input('description');
         $album->user_id = request()->input('user_id');
+        $album->album_thumb = '';
+
         $res = $album->save();
+        //dd($album->id);
+        if($res) {
+            if ($this->processFile($album->id, request(), $album)) {
+                $album->save();
+            }
+        }
+
+
         /*
         $res = Album::create(
             ['album_name' => request()->input('name'),
@@ -62,6 +74,9 @@ class AlbumsController extends Controller
         $album = Album::find($id);
         $album->album_name = request()->input('name');
         $album->description = request()->input('description');
+
+        $this->processFile($id, $req,$album);
+
         $res = $album->save();
         /*
         $res = Album::where('id', $id)->update(
@@ -78,6 +93,30 @@ class AlbumsController extends Controller
         //return Album::where('id', $id)->delete();
     }
 
+    /**
+     * @param Request $req
+     * @param $id
+     * @param $album
+     */
+    public function processFile($id, Request $req, &$album): bool
+    {
+        if(!$req->hasFile('album_thumb')) {
+            return false;
+        }
+
+        $file = $req->file('album_thumb');
+
+        if(!$file->isValid()) {
+            return false;
+        }
+
+        $fileName = $id . '.' . $file->extension();
+        $file->storeAs(env('ALBUM_THUMB_DIR'), $fileName);
+                //$fileName = $file->store(env('ALBUM_THUMB_DIR'));
+        $album->album_thumb = env('ALBUM_THUMB_DIR') . '/' . $fileName;
+
+        return true;
+    }
 
     /* Chiamate al DB con query grezze
     public function index(Request $request) {
@@ -143,4 +182,5 @@ class AlbumsController extends Controller
 
         //return redirect()->back();
     }*/
+
 }

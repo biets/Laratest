@@ -8,4 +8,12 @@ class Album extends Model {
     //se la primary key della tabella non è id: protected $primaryKey = 'album_id'
     //in questo caso la primaryKey coincide con id
     protected $fillable = ['album_name', 'description', 'user_id'];
+
+    public function getPathAttribute () {
+        $url = $this->album_thumb;
+        if(stristr($this->album_thumb,'http') === false) {
+            $url = 'storage/'.$this->album_thumb;
+        }
+        return $url;
+    }
 }
