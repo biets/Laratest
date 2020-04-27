@@ -35,6 +35,10 @@ Route::get('/albums/{id}/edit', 'AlbumsController@edit');
 Route::get('/albums/{album}/images', 'AlbumsController@getImages')->name('albums.getImages')->where('id', '[0-9]+');
 Route::delete('/albums/{album}', 'AlbumsController@delete')->where('id', '[0-9]+');
 
+//IMAGES
+
+Route::resource('photos', 'PhotosController');
+
 // USERS
 Route::get('/users', function () {
     return User::all();
