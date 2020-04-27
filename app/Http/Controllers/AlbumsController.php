@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class AlbumsController extends Controller
 {
     public function index(Request $request) {
-        $queryBuilder = DB::table('albums')->orderBy('id', 'DESC');
+        $queryBuilder = Album::orderBy('id', 'DESC');
         if($request->has('id')) {
             $queryBuilder->where('id','=', $request->input('id'));
         }
@@ -26,11 +26,17 @@ class AlbumsController extends Controller
     }
 
     public function save() {
-        $res = DB::table('albums')->insert(
+        $album = new Album();
+        $album->album_name = request()->input('name');
+        $album->description = request()->input('description');
+        $album->user_id = request()->input('user_id');
+        $res = $album->save();
+        /*
+        $res = Album::create(
             ['album_name' => request()->input('name'),
                 'description' => request()->input('description'),
                 'user_id' => request()->input('user_id')
-            ]);
+            ]);*/
         $message = $res ? 'Album '.request()->input('name').' inserito ':'Album '.request()->input('name').' non inserito ';
         session()->flash('message', $message);
         return redirect()->route('albums');
@@ -44,25 +50,32 @@ class AlbumsController extends Controller
     }
 
     public function edit($id) {
-        DB::table('albums')->where('id');
-        $sql ="SELECT album_name, description, id FROM albums WHERE id=:id";
-        $album = DB::select($sql, ['id'=> $id]);
+        $album = Album::find($id);
+        //DB::table('albums')->where('id');
+        //$sql ="SELECT album_name, description, id FROM albums WHERE id=:id";
+        //$album = DB::select($sql, ['id'=> $id]);
 
-        return view('albums.editalbum')->with('album', $album[0]);
+        return view('albums.editalbum')->with('album', $album);
     }
 
     public function store($id, Request $req){
-        $res = DB::table('albums')->where('id', $id)->update(
+        $album = Album::find($id);
+        $album->album_name = request()->input('name');
+        $album->description = request()->input('description');
+        $res = $album->save();
+        /*
+        $res = Album::where('id', $id)->update(
             ['album_name' => request()->input('name'),
                 'description' => request()->input('description')]
-        );
+        );*/
         $message = $res ? 'Album id: '.$id.' aggiornato ':'Album id: '.$id.' non aggiornato ';
         session()->flash('message', $message);
         return redirect()->route('albums');
     }
 
     public function delete($id) {
-        return DB::table('albums')->where('id', $id)->delete();
+        return Album::find($id)->delete();
+        //return Album::where('id', $id)->delete();
     }
 
 
