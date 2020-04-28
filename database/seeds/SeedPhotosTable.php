@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Photo;
+use App\Models\Album;
 
 class SeedPhotosTable extends Seeder
 {
@@ -14,6 +15,12 @@ class SeedPhotosTable extends Seeder
      */
     public function run()
     {
-        factory(Photo::class, 200)->create();
+        $albums = Album::get();
+        foreach ($albums as $album) {
+            factory(Photo::class, 200)->create([
+                'album_id' => $album->id
+            ]);
+        }
+
     }
 }

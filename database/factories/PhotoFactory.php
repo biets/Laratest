@@ -20,7 +20,8 @@ use Illuminate\Support\Str;
 $factory->define(App\Models\Photo::class, function (Faker $faker) {
     $cats = ['abstract', 'animals', 'business', 'food', 'city'];
     return [
-        'album_id' => Album::inRandomOrder()->first()->id,
+        //'album_id' => Album::inRandomOrder()->first()->id,
+        'album_id' => 1,
         'name' => $faker->text(64),
         'description' => $faker->text(128),
         'img_path' => 'https://picsum.photos/640/680'

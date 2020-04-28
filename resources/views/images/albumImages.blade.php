@@ -34,6 +34,12 @@
         @empty
         <tr><td colspan="5">Non ci sono immagini</td></tr>
         @endforelse
+    <tr>
+        <td colspan="6" class="text-center">
+                    {{$images->links('vendor.pagination.bootstrap-4')}}
+        </td>
+
+    </tr>
 </table>
 @endsection
 @section('footer')

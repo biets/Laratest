@@ -21,11 +21,15 @@ class Photo extends Model
         }
         return $url;
     }
-    //stessa cosa della funzione precedente ma in modo diverso
+    //stessa cosa della funzione precedente ma in modo diverso così quando richiamo img_path è già formattatato correttamente
     public function getImgPathAttribute ($value) {
         if(stristr($value,'http') === false) {
             $value = 'storage/'.$value;
         }
         return $value;
+    }
+    //stesso principio di prima, per mettere sempre la prima lettera maiuscola quando setto il nome
+    public function setNameAttribute($value) {
+        $this->attributes['name'] = strtoupper($value);
     }
 }
