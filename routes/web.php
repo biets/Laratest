@@ -37,7 +37,10 @@ Route::delete('/albums/{album}', 'AlbumsController@delete')->where('id', '[0-9]+
 
 //IMAGES
 
-Route::resource('photos', 'PhotosController');
+Route::resource('/photos', 'PhotosController');
+Route::get('/photos/{photo}/edit', 'PhotosController@edit')->name('photos.edit');
+//Route::get('/photos', function () { return Photo::all(); });
+
 
 // USERS
 Route::get('/users', function () {
@@ -51,9 +54,6 @@ Route::get('usersnoalbum', function() {
 });
 
 
-Route::get('/photos', function () {
-    return Photo::all();
-});
 
 /*
 Route::get('/{name?}/{lastname?}/{age?}', function($name='', $lastname='', $age=0) {

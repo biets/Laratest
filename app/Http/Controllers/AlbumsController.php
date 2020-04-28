@@ -133,10 +133,11 @@ class AlbumsController extends Controller
 
     public function getImages(Album $album) {
 
-        $images = Photo::where('album_id', $album->id)->get();
-
-        return view('albums.images.albumImages', compact('album','images'));
+        $images = Photo::where('album_id', $album->id)->latest()->paginate(env('IMG_PER_PAGE'));
+        return view('images.albumImages', compact('album','images'));
     }
+
+
 
     /* Chiamate al DB con query grezze
     public function index(Request $request) {

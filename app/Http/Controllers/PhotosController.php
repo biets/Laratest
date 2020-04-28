@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use App\Models\Album;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,7 +16,7 @@ class PhotosController extends Controller
      */
     public function index()
     {
-        return Photo::get;
+        return Photo::get();
     }
 
     /**
@@ -23,10 +24,15 @@ class PhotosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $req)
     {
-        //
+        $id = $req->has('album_id')?$req->input('album_id') : null;
+        $album = Album::firstOrNew(['id' => $id]);
+        $photo = new Photo();
+        $albums =$this->getAlbums();
+        return view('images.editImage', compact('album','photo','albums'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -36,7 +42,13 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $photo = new Photo();
+       $photo->name = $request->input('name');
+       $photo->description = $request->input('description');
+       $photo->album_id = $request->input('album_id');
+       $this->processFile($photo, $request);
+       $photo->save();
+       return redirect(route('albums.getImages', $photo->album_id));
     }
 
     /**
@@ -47,7 +59,7 @@ class PhotosController extends Controller
      */
     public function show(Photo $photo)
     {
-        return $photo;
+        dd($photo);
     }
 
     /**
@@ -56,11 +68,17 @@ class PhotosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Photo $photo)
     {
-        //
+        $albums =$this->getAlbums();
+        $album = $photo->album;
+
+        return view('images.editImage', compact('album', 'photo', 'albums'));
     }
 
+    public function getAlbums() {
+        return Album::orderBy('album_name')->get();
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -68,9 +86,19 @@ class PhotosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Photo $photo)
     {
-        //
+        $this->processFile($photo, $request);
+        $photo->album_id = $request->album_id;
+        $photo->name = $request->input('name');
+        $photo->description = $request->input('description');
+        $res = $photo->save();
+
+        $message = $res ? 'Photo id: '.$photo->id.' aggiornato ':'Photo id: '.$photo->id.' non aggiornato ';
+        session()->flash('message', $message);
+        return redirect(route('albums.getImages', $photo->album_id));
+        //return redirect()->route('photos.index');
+
     }
 
     /**
@@ -94,22 +122,21 @@ class PhotosController extends Controller
      * @param $id
      * @param $photo
      */
-    public function processFile($id, Photo &$photo, Request $req=null): bool
+    public function processFile(Photo &$photo, Request $req=null): bool
     {
-        if(!$req->hasFile('img_paths')) {
+        if(!$req->hasFile('img_path')) {
             return false;
         }
 
-        $file = $req->file('img_paths');
-
+        $file = $req->file('img_path');
         if(!$file->isValid()) {
             return false;
         }
-
-        $fileName = $id . '.' . $file->extension();
-        $file->storeAs(env('IMG_DIR'), $fileName);
+        $imgName = preg_replace('@[a-z0-9]i@','_', $photo->name);
+        $fileName = $imgName. '.' . $file->extension();
+        $file->storeAs(env('IMG_DIR').'/'.$photo->album_id.'/', $fileName);
         //$fileName = $file->store(env('ALBUM_THUMB_DIR'));
-        //$album->img_paths = env('IMG_DIR') . '/' . $fileName;
+        $photo->img_path = env('IMG_DIR').'/'.$photo->album_id.'/'.$fileName;
 
         return true;
     }
