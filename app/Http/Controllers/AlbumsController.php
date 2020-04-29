@@ -7,13 +7,25 @@ use App\Http\Requests\AlbumUpdateRequest;
 use App\Models\Album;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class AlbumsController extends Controller
 {
+
+    public function __construct()
+    {
+        //un altro modo per autenticare i controller può essere quello di raggruppare le route senza il middleware e
+        //dichiararlo qui dentro
+        //$this->middleware('auth')->only(['nomi delle funzioni','create','edit'])
+        //$this->middleware('auth')->except(['nome della funzione da escludere'])
+    }
+
     public function index(Request $request) {
         $queryBuilder = Album::orderBy('id', 'DESC')->withCount('photos');
+        $queryBuilder->where('user_id', Auth::user()->id);
+
         if($request->has('id')) {
             $queryBuilder->where('id','=', $request->input('id'));
         }
@@ -35,7 +47,7 @@ class AlbumsController extends Controller
         $album = new Album();
         $album->album_name = $request->input('name');
         $album->description = $request->input('description');
-        $album->user_id = $request->input('user_id');
+        $album->user_id = $request->user()->id;
         $album->album_thumb = '';
 
         $res = $album->save();

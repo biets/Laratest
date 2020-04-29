@@ -6,7 +6,6 @@
     <form action="{{route('albums.save')}}" method="POST" enctype="multipart/form-data">
         {{csrf_field()}}
 
-        <input type="hidden" name="user_id" value="1" />
         <div class="form-group">
             <label for="">Name</label>
             <input required type="text" name="name" id="name" class="form-control" value="{{old('name')}}" placeholder="Album name" />

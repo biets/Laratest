@@ -30,7 +30,8 @@ Route::get('welcome/{name?}/{lastname?}/{age?}', 'HomeController@index')->where(
 Auth::routes();
 
 
-Route::group(['middleware'=>'auth'],
+Route::group(
+    ['middleware'=>'auth'],
     function(){
         Route::get('/', 'AlbumsController@index');
 
