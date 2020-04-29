@@ -10,6 +10,25 @@ use Illuminate\Support\Facades\Storage;
 class PhotosController extends Controller
 {
     /**
+     * Validazione campi
+     * oppure con php artisan make:request AlbumRequest e si possono passare in altro modo
+     * */
+
+    protected $rules = [
+      'album_id' => 'required|exists:albums',
+      'name' => 'required|unique:photos:name',
+      'description' => 'required',
+      'img_path' => 'required|image'
+    ];
+
+    protected $errorMessages = [
+        'album_id.required' => 'Il campo album è obbligatorio',
+        'name.required' => 'Il campo name è obbligatorio',
+        'description.required' => 'Il campo description è obbligatorio',
+        'img_path.required' => 'Il campo img_path è obbligatorio'
+    ];
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -42,6 +61,7 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
+       $this->validate($request, $this->rules, $this->errorMessages);
        $photo = new Photo();
        $photo->name = $request->input('name');
        $photo->description = $request->input('description');
@@ -88,6 +108,7 @@ class PhotosController extends Controller
      */
     public function update(Request $request, Photo $photo)
     {
+        $this->validate($request, $this->rules, $this->errorMessages);
         $this->processFile($photo, $request);
         $photo->album_id = $request->album_id;
         $photo->name = $request->input('name');

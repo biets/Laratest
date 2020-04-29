@@ -8,7 +8,7 @@
         New Image
         @endif
     </h1>
-
+    @include('components.inputerrors')
     @if($photo->id)
     <form action="{{route('photos.update', $photo->id)}}" method="POST" enctype="multipart/form-data">
         {{method_field('PATCH')}}
@@ -20,7 +20,7 @@
                 {{csrf_field()}}
         <div class="form-group">
             <label for="">Name</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{$photo->name}}" placeholder="Album name" />
+            <input type="text" name="name" id="name" class="form-control" value="{{old('name', $photo->name)}}" placeholder="Album name" />
         </div>
         <div class="form-group">
             <select name="album_id" id="album_id">
@@ -34,7 +34,7 @@
                 @include('images.partials.fileupload')
         <div class="form-group">
             <label for="">Description</label>
-            <textarea name="description" id="description">{{$photo->description}}</textarea>
+            <textarea name="description" id="description">{{old('description', $photo->description)}}</textarea>
         </div>
 
 
