@@ -76,8 +76,8 @@ class AlbumsController extends Controller
 
     public function store($id, AlbumUpdateRequest $req){
         $album = Album::find($id);
-        $album->album_name = request()->input('name');
-        $album->description = request()->input('description');
+        $album->album_name = $req->input('name');
+        $album->description = $req->input('description');
 
         $this->processFile($id, $req,$album);
 

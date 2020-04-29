@@ -19,13 +19,14 @@ class AlbumUpdateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * @param $id
      * @return array
      */
     public function rules()
     {
         return [
 
-            'name' => 'required|unique:albums,album_name',
+            'name' => 'required|unique:albums,album_name,'.$this->id,
             'description' => 'required',
             //'user_id' => 'required'
         ];
