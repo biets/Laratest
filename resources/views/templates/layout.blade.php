@@ -40,8 +40,9 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+            @if(Auth::check())
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/albums">Albums</a>
@@ -59,6 +60,7 @@
             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
         </form>
 -->
+        @endif
         <ul class="navbar-nav ml-auto">
             <!-- Authentication Links -->
             @guest
