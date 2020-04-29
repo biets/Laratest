@@ -24,6 +24,8 @@ Route::get('welcome/{name?}/{lastname?}/{age?}', 'HomeController@index')->where(
     'age'=>'[0-9]{1,3}'
 ]);
 
+Route::get('/home', 'AlbumsController@index')->name('albums');
+
 // ALBUMS
 
 Route::get('/albums', 'AlbumsController@index')->name('albums');
@@ -43,6 +45,11 @@ Route::get('/photos/{photo}/edit', 'PhotosController@edit')->name('photos.edit')
 
 
 // USERS
+
+Auth::routes();
+
+
+
 Route::get('/users', function () {
     return User::all();
 });
@@ -72,3 +79,5 @@ Route::get('/{name?}/{lastname?}/{age?}', function($name='', $lastname='', $age=
 //Route::get('/{name?}/{surname?}/{age?}', function($name, $surname, $age) {
 //    return "nome ".$name." cognome ".$surname." età ".$age;
 //});
+
+

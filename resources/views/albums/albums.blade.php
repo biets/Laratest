@@ -13,7 +13,6 @@
             <li class="list-group-item">
                 <div class="justify-content-end">
                     ({{$album->id}}) {{$album->album_name}}
-                    <a href="/albums/{{$album->id}}/edit" class="btn btn-primary">UPDATE</a>
                     @if($album->album_thumb)
                         <img width="150" height="150" src="{{asset($album->path)}}" title="{{$album->album_name}}" alt="{{$album->album_name}}" />
                     @endif
