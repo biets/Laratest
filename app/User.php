@@ -40,6 +40,10 @@ class User extends Authenticatable
     ];
 
     public function albums() {
-        $this->hasMany(Album::class);
+        return $this->hasMany(Album::class);
+    }
+
+    public function getFullNameAttribute() {
+        return $this->name;
     }
 }

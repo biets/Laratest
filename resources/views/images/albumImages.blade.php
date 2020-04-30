@@ -8,7 +8,8 @@
         @endcomponent
     @endif
 
-<table class="table table-bordered">
+<table class="table table-striped">
+    <thead>
     <tr>
         <th>Id</th>
         <th>Created date</th>
@@ -17,18 +18,23 @@
         <th>Thumbnail</th>
         <th>Delete</th>
     </tr>
-
+    </thead>
+    <tbody>
     @forelse($images as $image)
     <tr>
         <td>{{$image->id}}</td>
-        <td>{{$image->created_at}}</td>
+        <td>{{$image->created_at->format('d/m/yy H:i')}}</td>
         <td>{{$image->name}}</td>
-        <td>{{$album->album_name}}</td>
-        <td><img src="{{asset($image->img_path)}}" height="100" width="100" /></td>
+        <td><a href="{{route('album.edit', $image->album_id)}}" >{{$album->album_name}}</a></td>
+        <td><img src="{{asset($image->img_path)}}" height="100" /></td>
 
         <td>
-            <a href="{{route('photos.edit', $image->id)}}" class="btn btn-primary">EDIT</a>
-            <a href="{{route('photos.destroy', $image->id)}}" class="btn btn-danger">DELETE</a>
+            <a href="{{route('photos.edit', $image->id)}}" title="Edit" class="btn btn-primary">
+                <span class="fa fa-pencil-alt"></span>
+            </a>
+            <a href="{{route('photos.destroy', $image->id)}}" title="Delete" class="btn btn-danger">
+                <span class="fa fa-minus"></span>
+            </a>
         </td>
     </tr>
         @empty
@@ -40,6 +46,7 @@
         </td>
 
     </tr>
+    </tbody>
 </table>
 @endsection
 @section('footer')

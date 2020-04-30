@@ -85,23 +85,32 @@ class AlbumsController extends Controller
             oppure è possibile farlo con i gate in authserviceProvider.php
          * if($album->user->id !== Auth::user()->id) {
             abort(401, 'Unauthorized');
-        }*/
+        }
+        Metodo autorizzazione con i gat
         if(Gate::denies('manage-album', $album)) {
             abort(401, 'Unauthorized');
         }
+        Metodo con le policy:
+        */
+        //altro metodo: Auth::user()->can('update', $album);
+
+        $this->authorize('update', $album);
+
+        return view('albums.editalbum')->with('album', $album);
+
+
         //DB::table('albums')->where('id');
         //$sql ="SELECT album_name, description, id FROM albums WHERE id=:id";
         //$album = DB::select($sql, ['id'=> $id]);
-
-        return view('albums.editalbum')->with('album', $album);
     }
 
     public function store($id, AlbumUpdateRequest $req){
         $album = Album::find($id);
-
+        $this->authorize('update', $album);
+        /*
         if(Gate::denies('manage-album', $album)) {
             abort(401, 'Unauthorized');
-        }
+        }*/
 
 
         $album->album_name = $req->input('name');

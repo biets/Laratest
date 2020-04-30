@@ -5,10 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Photo;
 use App\Models\Album;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->authorizeResource(Photo::class);
+    }
+
     /**
      * Validazione campi
      * oppure con php artisan make:request AlbumRequest e si possono passare in altro modo
@@ -98,8 +106,11 @@ class PhotosController extends Controller
     }
 
     public function getAlbums() {
-        return Album::orderBy('album_name')->get();
+
+        return Album::orderBy('album_name')->where('user_id', Auth::user()->id)->get();
+
     }
+
     /**
      * Update the specified resource in storage.
      *

@@ -9,6 +9,7 @@
     <title>@yield('title', 'Home')</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/starter-template/">
+    <link rel="stylesheet" href="/css/all.css" />
     <link rel="stylesheet" href="/css/app.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -77,10 +78,10 @@
         <ul class="navbar-nav mr-auto">
             @if(Auth::check())
             <li class="nav-item active">
-                <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/albums">Albums</a>
+                <a class="nav-link" href="{{route('albums')}}">Albums</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{route('albums.create')}}">New Album</a>

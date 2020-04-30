@@ -31,20 +31,23 @@ Auth::routes();
 
 
 Route::group(
-    ['middleware'=>'auth'],
+    [
+        'middleware'=>'auth',
+        'prefix' => 'dashboard'
+    ],
     function(){
-        Route::get('/', 'AlbumsController@index');
+        Route::get('/', 'AlbumsController@index')->name('albums');
 
         // ALBUMS
-        Route::get('/home', 'AlbumsController@index')->name('albums');
+        //Route::get('/home', 'AlbumsController@index')->name('albums');
         Route::get('/albums', 'AlbumsController@index')->name('albums');
         Route::get('/albums/create', 'AlbumsController@create')->name('albums.create');
         Route::post('/albums', 'AlbumsController@save')->name('albums.save');
         Route::patch('/albums/{id}', 'AlbumsController@store');
-        Route::get('/albums/{id}/edit', 'AlbumsController@edit');
+        Route::get('/albums/{id}/edit', 'AlbumsController@edit')->where('id', '[0-9]+')->name('album.edit');
         Route::get('/albums/{id}', 'AlbumsController@show')->where('id', '[0-9]+');
         Route::get('/albums/{album}/images', 'AlbumsController@getImages')->name('albums.getImages')->where('id', '[0-9]+');
-        Route::delete('/albums/{album}', 'AlbumsController@delete')->where('id', '[0-9]+');
+        Route::delete('/albums/{album}', 'AlbumsController@delete')->where('id', '[0-9]+')->name('album.delete');;
 
 
         //IMAGES
