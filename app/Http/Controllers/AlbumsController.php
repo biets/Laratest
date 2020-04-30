@@ -6,6 +6,7 @@ use App\Http\Requests\AlbumRequest;
 use App\Http\Requests\AlbumUpdateRequest;
 use App\Models\Album;
 use App\Models\Photo;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -78,7 +79,16 @@ class AlbumsController extends Controller
     }
 
     public function edit($id) {
+
         $album = Album::find($id);
+        /*Per proteggere l'edit da utenti diversi
+            oppure è possibile farlo con i gate in authserviceProvider.php
+         * if($album->user->id !== Auth::user()->id) {
+            abort(401, 'Unauthorized');
+        }*/
+        if(Gate::denies('manage-album', $album)) {
+            abort(401, 'Unauthorized');
+        }
         //DB::table('albums')->where('id');
         //$sql ="SELECT album_name, description, id FROM albums WHERE id=:id";
         //$album = DB::select($sql, ['id'=> $id]);
@@ -88,6 +98,12 @@ class AlbumsController extends Controller
 
     public function store($id, AlbumUpdateRequest $req){
         $album = Album::find($id);
+
+        if(Gate::denies('manage-album', $album)) {
+            abort(401, 'Unauthorized');
+        }
+
+
         $album->album_name = $req->input('name');
         $album->description = $req->input('description');
 
