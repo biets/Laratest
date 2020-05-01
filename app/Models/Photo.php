@@ -14,16 +14,17 @@ class Photo extends Model
     /**
     Aggiunge al path la cartella /storage
     */
-    public function getPathAttribute () {
-        $url = $this->img_path;
-        if(stristr($url,'http') === false) {
-            $url = 'storage/'.$this->img_path;
+    public function getPathAttribute(){
+        $url = $this->attributes['img_path'];
+        if(stristr($url ,'http') === false){
+            $url = 'storage/'.$url;
         }
         return $url;
     }
     //stessa cosa della funzione precedente ma in modo diverso così quando richiamo img_path è già formattatato correttamente
-    public function getImgPathAttribute ($value) {
-        if(stristr($value,'http') === false) {
+    public function getImgPathAttribute($value){
+
+        if(stristr($value ,'http') === false){
             $value = 'storage/'.$value;
         }
         return $value;

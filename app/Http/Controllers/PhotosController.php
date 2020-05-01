@@ -24,16 +24,17 @@ class PhotosController extends Controller
 
     protected $rules = [
       'album_id' => 'required|integer|exists:albums,id',
-      'name' => 'required|unique:photos,name',
+      'name' => 'required',
+      //'name' => 'required|unique:photos,name',
       'description' => 'required',
-      'img_path' => 'required|image'
+      //'img_path' => 'required|image'
     ];
 
     protected $errorMessages = [
         'album_id.required' => 'Il campo album è obbligatorio',
         'name.required' => 'Il campo name è obbligatorio',
         'description.required' => 'Il campo description è obbligatorio',
-        'img_path.required' => 'Il campo img_path è obbligatorio'
+        //'img_path.required' => 'Il campo img_path è obbligatorio'
     ];
 
     /**
@@ -69,7 +70,6 @@ class PhotosController extends Controller
      */
     public function store(Request $request)
     {
-
        $this->validate($request, $this->rules, $this->errorMessages);
        $photo = new Photo();
        $photo->name = $request->input('name');

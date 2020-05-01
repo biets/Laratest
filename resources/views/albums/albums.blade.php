@@ -6,8 +6,8 @@
         {{session()->get('message')}}
         @endcomponent
     @endif
-    <form>
-        <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
+
+
         <table class="table table-striped">
             <thead>
             <tr>
@@ -19,8 +19,9 @@
             </tr>
             </thead>
             <tbody>
-                <tr>
+
                 @foreach($albums as $album)
+                    <tr id="tr{{$album->id}}">
                         <td>(Id: {{$album->id}}) {{$album->album_name}} ({{$album->photos_count}} pictures)</td>
                         <td>
                             @if($album->album_thumb)
@@ -52,9 +53,12 @@
                         </a>
                             </div>
                             <div class="col-3">
-                        <a href="{{route('album.delete', $album->id)}}" title="Delete" class="btn btn-danger">
-                            <span class="fa fa-minus"></span>
-                        </a>
+                                <form id="form{{$album->id}}" method="post" action="{{route('album.delete',$album)}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button id="{{$album->id}}" title="Delete album" class="btn btn-danger">
+                                        <span class="fa fa-minus"></span></button>
+                                </form>
                             </div>
                         </div>
                     </td>
@@ -69,35 +73,38 @@
             </tr>
             </tbody>
         </table>
-    </form>
 @endsection
 @section('footer')
     @parent
     <script>
         $(document).ready(function () {
-                $('div.alert').fadeOut(5000);
+            $('div.alert').fadeOut(5000);
 
-               $('ul').on('click', 'a.btn-danger', function(ele){
-                    ele.preventDefault();
+            $('table').on('click', 'button.btn-danger2', function(evt){
+                evt.preventDefault();
 
-                    var urlAlbum = $(this).attr('href');
-                    var li = ele.target.parentNode.parentNode;
+                var id = evt.target.id;
+                var f = $('#form' + id);
+                var urlAlbum = f.attr('action');
+                var tr = $('#tr' + id);
+                console.log(tr)
+                //alert("id "+id+" form "+ f + "url album"+urlAlbum+ " tr" +tr);
+                $.ajax(urlAlbum, {
+                    method: 'DELETE',
+                    data: {
+                        '_token': '{{csrf_token()}}'
+                    },
+                    complete: function (resp) {
 
-                    $.ajax(urlAlbum, {
-                        method: 'DELETE',
-                        data: {
-                            '_token': $('#_token').val()
-                        },
-                        complete: function (resp) {
-                            console.log(resp);
-                             if(resp.responseText == 1) {
-                                 li.parentNode.removeChild(li);
-                             }else{
-                                 alert('Problem contacting server')
-                             }
+                        if(resp.responseText == 1) {
+                            tr.remove();
+                        }else{
+                            alert('Problem contacting server')
                         }
-                    })
+                    }
                 })
-      });
+            })
+        });
+
     </script>
 @endsection

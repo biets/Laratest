@@ -104,6 +104,9 @@ class AlbumsController extends Controller
         //$album = DB::select($sql, ['id'=> $id]);
     }
 
+    public function test($id) {
+        return "ID".$id;
+    }
     public function store($id, AlbumUpdateRequest $req){
         $album = Album::find($id);
         $this->authorize('update', $album);
@@ -130,6 +133,7 @@ class AlbumsController extends Controller
     }
 
     public function delete(Album $album) {
+
         $thumbnail = $album->album_thumb;
         $disk = config('filesystem.default');
         $res = $album->delete();
@@ -140,7 +144,11 @@ class AlbumsController extends Controller
             }
 
         }
-        return ' '.$res;
+        if(request()->ajax()) {
+            return ' ' . $res;
+        }else{
+            return redirect()->route('albums');
+        }
         //return Album::find($id)->delete();
         //return Album::where('id', $id)->delete();
     }

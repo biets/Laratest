@@ -16,7 +16,7 @@ use App\User;
 |
 */
 
-
+Route::get('/', 'GalleryController@index')->name('gallery.albums');
 
 Route::get('welcome/{name?}/{lastname?}/{age?}', 'HomeController@index')->where([
     'name'=> '[a-zA-Z]+',
@@ -39,15 +39,15 @@ Route::group(
         Route::get('/', 'AlbumsController@index')->name('albums');
 
         // ALBUMS
-        //Route::get('/home', 'AlbumsController@index')->name('albums');
+        //Route::get('/home', 'AlbumsController@index');
         Route::get('/albums', 'AlbumsController@index')->name('albums');
         Route::get('/albums/create', 'AlbumsController@create')->name('albums.create');
         Route::post('/albums', 'AlbumsController@save')->name('albums.save');
-        Route::patch('/albums/{id}', 'AlbumsController@store');
+        Route::patch('/albums/{id}', 'AlbumsController@store')->name('album.store');
         Route::get('/albums/{id}/edit', 'AlbumsController@edit')->where('id', '[0-9]+')->name('album.edit');
         Route::get('/albums/{id}', 'AlbumsController@show')->where('id', '[0-9]+');
-        Route::get('/albums/{album}/images', 'AlbumsController@getImages')->name('albums.getImages')->where('id', '[0-9]+');
-        Route::delete('/albums/{album}', 'AlbumsController@delete')->where('id', '[0-9]+')->name('album.delete');;
+        Route::get('/albums/{album}/images', 'AlbumsController@getImages')->name('albums.getImages');
+        Route::delete('/albums/{album}', 'AlbumsController@delete')->name('album.delete');;
 
 
         //IMAGES
@@ -55,8 +55,6 @@ Route::group(
         Route::resource('/photos', 'PhotosController');
         Route::get('/photos/{photo}/edit', 'PhotosController@edit')->name('photos.edit');
         //Route::get('/photos', function () { return Photo::all(); });
-
-
 
 
 
@@ -72,7 +70,15 @@ Route::group(
 
     });
 
+//Gallery
 
+Route::group(
+    ['prefix'=>'gallery'],
+    function(){
+        Route::get('albums', 'GalleryController@index')->name('gallery.albums');
+        Route::get('/', 'GalleryController@index')->name('gallery.albums');
+        Route::get('album/{album}/images', 'GalleryController@showAlbumImages')->name('gallery.album.images');
+    });
 
 
 

@@ -17,7 +17,7 @@ class AlbumUpdateRequest extends FormRequest
     {
         $album = Album::find($this->id);
 
-        $this->authorize('update', $album);
+        //$this->authorize('update', $album);
 
         /*if(Gate::denies('manage-album', $album)) {
             return false;

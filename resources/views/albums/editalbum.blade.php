@@ -3,7 +3,7 @@
 
 <h1>edit</h1>
 @include('components.inputerrors')
-<form action="/albums/{{$album->id}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('album.store',$album->id)}}" method="POST" enctype="multipart/form-data">
     {{csrf_field()}}
     <input type="hidden" name="_method" value="PATCH" />
     @include('albums.partials.fileupload')

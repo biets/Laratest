@@ -30,7 +30,6 @@
             @endforeach
             </select>
         </div>
-
                 @include('images.partials.fileupload')
         <div class="form-group">
             <label for="">Description</label>
