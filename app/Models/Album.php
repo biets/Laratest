@@ -23,6 +23,10 @@ class Album extends Model {
         return $this->hasMany(Photo::class,'album_id', 'id');
     }
 
+    public function categories() {
+        return $this->belongsToMany(AlbumCategory::class, 'album_category', 'album_id', 'category_id' );
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

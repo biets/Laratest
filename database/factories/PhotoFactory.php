@@ -18,13 +18,26 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(App\Models\Photo::class, function (Faker $faker) {
-    $cats = ['abstract', 'animals', 'business', 'food', 'city'];
+    $cats = ['abstract',
+        'animals',
+        'business',
+        'cats',
+        'city',
+        'food',
+        'fashion',
+        'people',
+        'nature',
+        'sports',
+        'technics',
+        'transport',
+    ];
     return [
         //'album_id' => Album::inRandomOrder()->first()->id,
         'album_id' => 1,
         'name' => $faker->text(64),
         'description' => $faker->text(128),
-        'img_path' => 'https://picsum.photos/640/680'
+        'img_path' => $faker->imageUrl(640, 480, $faker->randomElement($cats))
+        //'img_path' => 'https://picsum.photos/640/680'
     ];
 });
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AlbumCategory;
 use Illuminate\Database\Seeder;
 use App\User;
 use App\Models\Album;
@@ -18,8 +19,11 @@ class DatabaseSeeder extends Seeder
         User::truncate();
         Album::truncate();
         Photo::truncate();
+        AlbumCategory::truncate();
         $this->call(SeedUserTable::class);
+        $this->call(SeedAlbumCategoryTable::class);
         $this->call(SeedAlbumTable::class);
         $this->call(SeedPhotosTable::class);
+
     }
 }

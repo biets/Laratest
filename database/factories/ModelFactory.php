@@ -19,11 +19,25 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(App\Models\Album::class, function (Faker $faker) {
+    $cats = ['abstract',
+        'animals',
+        'business',
+        'cats',
+        'city',
+        'food',
+        'fashion',
+        'people',
+        'nature',
+        'sports',
+        'technics',
+        'transport',
+    ];
+
     return [
         'album_name' => $faker->name,
         'description' => $faker->text(128),
         'user_id' => User::inRandomOrder()->first(),
-        'album_thumb' => 'https://picsum.photos/120/120'
+        'album_thumb' => $faker->imageUrl(640, 480, $faker->randomElement($cats))
     ];
 });
 

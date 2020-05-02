@@ -3,13 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use App\Models\AlbumCategory;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
 {
     public function index() {
-        return view('gallery.albums')->with('albums', Album::latest()->get());
+        $albums = Album::latest()->with('categories')->get();
+
+        //foreach ($albums as $album) {
+        //  return $album->categories;
+        //}
+
+        return view('gallery.albums')->with('albums', $albums);
+    }
+
+    public function showAlbumByCategory(AlbumCategory $category) {
+        $albums = $category->albums;
+
+        return view('gallery.albums')->with('albums',$category->albums);
     }
 
     public function showAlbumImages(Album $album) {
