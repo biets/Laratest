@@ -17,6 +17,10 @@
 
 
     <style>
+        main {
+            padding-top: 40px;
+        }
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -42,10 +46,11 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            @if(Auth::check())
             <li class="nav-item active">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
+            @if(Auth::check())
+
             <li class="nav-item">
                 <a class="nav-link" href="{{route('albums')}}">Albums</a>
             </li>
@@ -55,6 +60,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{route('photos.create')}}">New Image</a>
             </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('categories.index')}}">Categories</a>
+                </li>
 
             @endif
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlbumCategoryRequest;
 use App\Models\Album;
 use App\Models\AlbumCategory;
 use Illuminate\Http\Request;
@@ -15,7 +16,10 @@ class AlbumCategoryController extends Controller
      */
     public function index()
     {
-        return AlbumCategory::with('album')->get();
+
+        $categories = AlbumCategory::withCount('albums')->latest()->paginate(5);
+
+        return view('categories.index', compact('categories'));
     }
 
     /**
@@ -34,9 +38,12 @@ class AlbumCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AlbumCategoryRequest $request)
     {
-        //
+        $category = new AlbumCategory();
+        $category->category_name = $request->category_name;
+        $category->save();
+        return redirect()->route('categories.index');
     }
 
     /**

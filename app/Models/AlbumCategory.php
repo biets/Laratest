@@ -11,8 +11,8 @@ class AlbumCategory extends Model
     protected $table = "album_categories";
 
     public function albums() {
-        return $this->belongsToMany(Album::class,'album_category',  'category_id','album_id')->
-        withTimestamps();
+        return $this->belongsToMany(Album::class,'album_category',  'category_id','album_id')
+            ->withTimestamps();
     }
 
 }

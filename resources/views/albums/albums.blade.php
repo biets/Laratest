@@ -12,6 +12,7 @@
             <thead>
             <tr>
                 <th>Album name</th>
+                <th>Category</th>
                 <th>Thumb</th>
                 <th>Creator</th>
                 <th>Created Date</th>
@@ -23,14 +24,27 @@
                 @foreach($albums as $album)
                     <tr id="tr{{$album->id}}">
                         <td>(Id: {{$album->id}}) {{$album->album_name}} ({{$album->photos_count}} pictures)</td>
+
+                        <td>
+                            @if($album->categories->count())
+                                <ul>
+                                    @foreach($album->categories as $category)
+                                        <li>{{$category->category_name}} {{$category->id}}</li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                No categories bound
+                            @endif
+                        </td>
                         <td>
                             @if($album->album_thumb)
                                 <img width="120" src="{{asset($album->path)}}" title="{{$album->album_name}}" alt="{{$album->album_name}}" />
                             @endif
                         </td>
                         <td>{{$album->user->fullname}}</td>
+
                         <td>{{$album->created_at->format('d/m/yy H:i')}}</td>
-                    <td>
+                        <td>
 
                         <div class="row">
                             <div class="col-3">

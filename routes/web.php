@@ -56,6 +56,11 @@ Route::group(
         Route::get('/photos/{photo}/edit', 'PhotosController@edit')->name('photos.edit');
         //Route::get('/photos', function () { return Photo::all(); });
 
+        //CATEGORY IMAGE
+
+        Route::resource('/categories', 'AlbumCategoryController');
+
+
 
 
         Route::get('/users', function () {
@@ -77,7 +82,7 @@ Route::group(
     function(){
 
         Route::get('albums', 'GalleryController@index')->name('gallery.albums');
-        Route::get('albums/category/{category}', 'GalleryController@showAlbumByCategory')->name('gallery.albums.category');
+        Route::get('albums/category/{category}', 'GalleryController@showAlbumsByCategory')->name('gallery.albums.category');
         Route::get('/', 'GalleryController@index')->name('gallery.albums');
         Route::get('album/{album}/images', 'GalleryController@showAlbumImages')->name('gallery.album.images');
     });

@@ -16,6 +16,7 @@
         <label for="">Description</label>
         <textarea name="description" id="description">{{$album->description}}</textarea>
     </div>
+    @include('albums.partials.category_combo')
     <button required type="submit" class="btn btn-primary">Submit</button>
     <a href="{{route('albums')}}" class=" btn btn-success">Back</a>
     <a href="{{route('albums.getImages', $album->id)}}" class=" btn btn-default">Images</a>

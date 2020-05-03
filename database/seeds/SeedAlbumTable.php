@@ -20,6 +20,7 @@ class SeedAlbumTable extends Seeder
         factory(Album::class, 10)->create()
             ->each(function ($album){
                 $cats = AlbumCategory::inRandomOrder()->take(3)->pluck('id');
+
                 $cats->each(function($cat_id) use ($album) {
                     AlbumsCategory::create(
                         [

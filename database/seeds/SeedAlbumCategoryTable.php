@@ -25,7 +25,11 @@ class SeedAlbumCategoryTable extends Seeder
         ];
 
         foreach ($cats as $cat) {
-            AlbumCategory::create(['category_name'=>$cat]);
+            $u = \App\User::inRandomOrder()->first();
+            AlbumCategory::create([
+                'category_name' => $cat,
+                'user_id' => $u->id
+            ]);
 
         }
     }

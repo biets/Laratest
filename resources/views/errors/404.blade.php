@@ -1,4 +1,4 @@
 @extends('templates.layout')
 @section('content')
-<h1>Unauthorized</h1>
+<h1>No data found</h1>
 @endsection

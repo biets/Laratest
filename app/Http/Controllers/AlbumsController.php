@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AlbumRequest;
 use App\Http\Requests\AlbumUpdateRequest;
 use App\Models\Album;
+use App\Models\AlbumCategory;
 use App\Models\Photo;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class AlbumsController extends Controller
     }
 
     public function index(Request $request) {
-        $queryBuilder = Album::orderBy('id', 'DESC')->withCount('photos');
+        $queryBuilder = Album::orderBy('id', 'DESC')->withCount('photos')->with('categories');
         $queryBuilder->where('user_id', Auth::user()->id);
 
         if($request->has('id')) {
@@ -40,7 +41,12 @@ class AlbumsController extends Controller
 
     public function create() {
         $album = new Album();
-        return view('albums.create', ['album' => $album]);
+        $categories = AlbumCategory::get();
+        return view('albums.create', [
+            'album' => $album,
+            'categories' => $categories,
+            'selectedCategories' => []
+        ]);
     }
 
     public function save(AlbumRequest $request)
@@ -52,12 +58,16 @@ class AlbumsController extends Controller
         $album->album_thumb = '';
 
         $res = $album->save();
-        //dd($album->id);
         if($res) {
-            if ($this->processFile($album->id, $request, $album)) {
-                $album->save();
+            if($request->has('categories')) {
+                $album->categories()->attach($request->categories);
             }
+            if ($this->processFile($album->id, $request, $album)) {
+                    $album->save();
+            }
+
         }
+
 
 
         /*
@@ -81,6 +91,17 @@ class AlbumsController extends Controller
     public function edit($id) {
 
         $album = Album::find($id);
+        $categories = AlbumCategory::get();
+        $selectedCategories = $album->categories->pluck('id')->toArray();
+        //il metodo pluck sceglie solo quale colonna ritornare
+
+        $this->authorize('update', $album);
+
+        return view('albums.editalbum')->with([
+            'album' => $album,
+            'categories' => $categories,
+            'selectedCategories' => $selectedCategories
+            ]);
         /*Per proteggere l'edit da utenti diversi
             oppure è possibile farlo con i gate in authserviceProvider.php
          * if($album->user->id !== Auth::user()->id) {
@@ -93,10 +114,6 @@ class AlbumsController extends Controller
         Metodo con le policy:
         */
         //altro metodo: Auth::user()->can('update', $album);
-
-        $this->authorize('update', $album);
-
-        return view('albums.editalbum')->with('album', $album);
 
 
         //DB::table('albums')->where('id');
@@ -122,6 +139,10 @@ class AlbumsController extends Controller
         $this->processFile($id, $req,$album);
 
         $res = $album->save();
+        //la funzione sync di laravel sincronizza in automatico la cartella many to many senza dover prima cacncellare tutti i record
+        //e doverli reinserire
+        $album->categories()->sync($req->categories);
+
         /*
         $res = Album::where('id', $id)->update(
             ['album_name' => request()->input('name'),

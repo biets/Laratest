@@ -16,7 +16,7 @@
         </div>
 
         @include('albums.partials.fileupload')
-
+        @include('albums.partials.category_combo')
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 @endsection
